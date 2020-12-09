@@ -1,4 +1,4 @@
-
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e735521926e34926aa08eca18c1e22bc)](https://www.codacy.com/gh/Roddg/graduation/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Roddg/graduation&amp;utm_campaign=Badge_Grade)
 ---
 Graduation project TopJava
 ---
