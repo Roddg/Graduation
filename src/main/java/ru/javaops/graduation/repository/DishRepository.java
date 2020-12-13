@@ -19,5 +19,5 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
 
     List<Dish> getAllByRestaurantIdAndDate(int restaurantId, LocalDate date);
 
-    int delete(@Param("id") int id);
+    int deleteById(@Param("id") int id);
 }

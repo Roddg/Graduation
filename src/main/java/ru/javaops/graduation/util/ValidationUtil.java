@@ -3,7 +3,18 @@ package ru.javaops.graduation.util;
 import ru.javaops.graduation.model.AbstractBaseEntity;
 import ru.javaops.graduation.util.exception.NotFoundException;
 
+import javax.validation.*;
+
 public class ValidationUtil {
+    private static final Validator validator;
+
+    static {
+        //  From Javadoc: implementations are thread-safe and instances are typically cached and reused.
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        //  From Javadoc: implementations of this interface must be thread-safe
+        validator = factory.getValidator();
+    }
+
     private ValidationUtil() {
     }
 
@@ -40,5 +51,16 @@ public class ValidationUtil {
         } else if (entity.id() != id) {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
+    }
+
+    //  http://stackoverflow.com/a/28565320/548473
+    public static Throwable getRootCause(Throwable t) {
+        Throwable result = t;
+        Throwable cause;
+
+        while (null != (cause = result.getCause()) && (result != cause)) {
+            result = cause;
+        }
+        return result;
     }
 }
