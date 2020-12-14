@@ -56,7 +56,6 @@
 
     </properties>
 
-
     <dependencies>
         <!-- Logging with SLF4J & LogBack -->
         <dependency>

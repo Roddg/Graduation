@@ -21,7 +21,7 @@
         <appender-ref ref="result"/>
     </logger>
 
-    <logger name="ru.javawebinar.graduation" level="debug"/>
+    <logger name="ru.javaops.graduation" level="debug"/>
 
     <root level="INFO">
         <appender-ref ref="console"/>
