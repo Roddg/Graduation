@@ -3,15 +3,12 @@ package ru.javaops.graduation.service;
 import ru.javaops.graduation.model.Role;
 import ru.javaops.graduation.model.User;
 import ru.javaops.graduation.util.exception.NotFoundException;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import static ru.javaops.graduation.UserTestData.*;
 import static org.junit.Assert.assertThrows;
@@ -67,9 +64,9 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void update() throws Exception {
-        User updated = getUpdated();
+        User updated = getUpdatedUser();
         service.update(updated);
-        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
+        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdatedUser());
     }
 
     @Test
@@ -87,7 +84,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void getWithVotesNotFound() throws Exception {
-        Assert.assertThrows(NotFoundException.class,
-                () -> service.getWithVotes(1));
+        assertThrows(NotFoundException.class,
+                () -> service.getWithVotes(NOT_FOUND));
     }
 }

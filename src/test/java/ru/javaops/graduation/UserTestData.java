@@ -22,7 +22,7 @@ public class UserTestData {
         return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.USER));
     }
 
-    public static User getUpdated() {
+    public static User getUpdatedUser() {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         return updated;

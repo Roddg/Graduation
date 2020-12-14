@@ -53,7 +53,6 @@ public class Restaurant extends AbstractNamedEntity {
                 "id=" + id +
                 ", name='" + name +
                 "enabled=" + enabled +
-                ", registered=" + registered +
                 '}';
     }
 }

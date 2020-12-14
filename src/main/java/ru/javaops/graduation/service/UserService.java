@@ -8,13 +8,12 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
-import static ru.javaops.graduation.util.ValidationUtil.checkNotFound;
-import static ru.javaops.graduation.util.ValidationUtil.checkNotFoundWithId;
+import static ru.javaops.graduation.util.RepositoryUtil.findById;
+import static ru.javaops.graduation.util.ValidationUtil.*;
 
 @Service
 public class UserService {
     private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
-
     private final UserRepository repository;
 
     public UserService(UserRepository repository) {
@@ -30,8 +29,9 @@ public class UserService {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
+
     public User get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+        return findById(repository, id);
     }
 
     public User getByEmail(String email) {
