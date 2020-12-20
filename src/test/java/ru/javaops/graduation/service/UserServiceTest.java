@@ -1,5 +1,6 @@
 package ru.javaops.graduation.service;
 
+import ru.javaops.graduation.VoteTestData;
 import ru.javaops.graduation.model.Role;
 import ru.javaops.graduation.model.User;
 import ru.javaops.graduation.util.exception.NotFoundException;
@@ -14,7 +15,6 @@ import static ru.javaops.graduation.UserTestData.*;
 import static org.junit.Assert.assertThrows;
 
 public class UserServiceTest extends AbstractServiceTest {
-
     @Autowired
     protected UserService service;
 
@@ -41,7 +41,7 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void deletedNotFound() throws Exception {
+    public void deleteNotFound() throws Exception {
         assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND));
     }
 
@@ -80,6 +80,13 @@ public class UserServiceTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)), ConstraintViolationException.class);
+    }
+
+    @Test
+    public void getWithVotes() throws Exception {
+        User user = service.getWithVotes(USER_ID);
+        USER_MATCHER.assertMatch(user, USER);
+        VoteTestData.VOTE_LAZY_MATCHER.assertMatch(user.getVotes(), VoteTestData.VOTES);
     }
 
     @Test

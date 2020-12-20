@@ -1,12 +1,12 @@
 package ru.javaops.graduation.service;
 
 import ru.javaops.graduation.model.Restaurant;
-import ru.javaops.graduation.model.User;
 import ru.javaops.graduation.repository.RestaurantRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.javaops.graduation.util.RepositoryUtil.findById;
@@ -39,12 +39,14 @@ public class RestaurantService {
         return repository.findAll(SORT_NAME_REGISTERED);
     }
 
+    public List<Restaurant> getAllByDishesDate(LocalDate date) {return repository.getAllByDishesDate(date);}
+
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         checkNotFoundWithId(repository.save(restaurant), restaurant.id());
     }
 
-    public User getWithVotes(int id) {
+    public Restaurant getWithVotes(int id) {
         return checkNotFoundWithId(repository.getWithVotes(id), id);
     }
 }

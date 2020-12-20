@@ -38,7 +38,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void deletedNotFound() throws Exception {
+    public void deleteNotFound() throws Exception {
         assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND));
     }
 

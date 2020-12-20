@@ -3,13 +3,15 @@ package ru.javaops.graduation.service;
 import ru.javaops.graduation.model.Dish;
 import ru.javaops.graduation.repository.DishRepository;
 import ru.javaops.graduation.repository.RestaurantRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.javaops.graduation.util.RepositoryUtil.findById;
+import static ru.javaops.graduation.util.ValidationUtil.checkNew;
 import static ru.javaops.graduation.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -22,23 +24,20 @@ public class DishService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @Transactional
-    public Dish save(Dish dish, int restaurantId) {
-        if (!dish.isNew() && get(dish.getId(), restaurantId) == null) {
-            return null;
-        }
-        dish.setRestaurant(restaurantRepository.getOne(restaurantId));
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public Dish create(Dish dish, int restaurantId) {
+        Assert.notNull(dish, "dish must not be null");
+        checkNew(dish);
+        dish.setRestaurant(findById(restaurantRepository, restaurantId));
         return dishRepository.save(dish);
     }
 
-    public Dish create(Dish dish, int restaurantId) {
-        Assert.notNull(dish, "dish must not be null");
-        return save(dish, restaurantId);
-    }
-
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Dish update(Dish dish, int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
-        return checkNotFoundWithId(save(dish, restaurantId), dish.id());
+        checkNotFoundWithId(get(dish.id(), restaurantId), dish.id());
+        dish.setRestaurant(findById(restaurantRepository, restaurantId));
+        return checkNotFoundWithId(dishRepository.save(dish), dish.id());
     }
 
     public void delete(int id, int restaurantId) {

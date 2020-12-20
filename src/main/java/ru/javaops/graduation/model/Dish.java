@@ -1,6 +1,7 @@
 package ru.javaops.graduation.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 
@@ -16,10 +17,11 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "name", "date"}, name = "dishes_unique_restaurant_name_date_idx")})
 @Getter
 @Setter
+@NoArgsConstructor
 public class Dish extends AbstractNamedEntity {
     @Column(name = "price", nullable = false)
     @Positive
-    private int price;
+    private Long price;
 
     @Column(name = "date", nullable = false)
     @NotNull
@@ -31,21 +33,19 @@ public class Dish extends AbstractNamedEntity {
     @NotNull
     private Restaurant restaurant;
 
-    public Dish() {
+    public Dish(LocalDate date, String name, Long price, Restaurant restaurant) {
+        this(null, date, name, price, restaurant);
     }
 
-    public Dish(LocalDate date, String name, Integer price) {
-        this(null, date, name, price);
-    }
-
-    public Dish(Integer id, LocalDate date, String name, Integer price) {
+    public Dish(Integer id, LocalDate date, String name, Long price, Restaurant restaurant) {
         super(id, name);
         this.date = date;
         this.price = price;
+        this.restaurant = restaurant;
     }
 
     public Dish(Dish d) {
-        this(d.getId(), d.getDate(), d.getName(), d.getPrice());
+        this(d.getId(), d.getDate(), d.getName(), d.getPrice(), d.getRestaurant());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ru.javaops.graduation.repository;
 
 import ru.javaops.graduation.model.Vote;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,18 +15,13 @@ import java.util.List;
 @Repository
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
-    Vote findOneByIdAndUserId(int id, int userId);
-
-    List<Vote> findAllByUserIdOrderByDateDesc(int userId);
-
-    List<Vote> findAllByRestaurantIdAndDate(int restaurantId, LocalDate date);
-
-    int countVoteByRestaurantIdAndDate(int restaurantId, LocalDate date);
-
     @Transactional
     @Modifying
     int deleteByIdAndUserId(int id, int userId);
 
-    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.id=:id AND v.restaurant.id=:restaurantId")
-    Vote getWithRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
+    @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.date DESC")
+    List<Vote> getAll(@Param("userId") int userId);
+
+    @EntityGraph(attributePaths = {"restaurant", "user"}, type = EntityGraph.EntityGraphType.LOAD)
+    Vote getByUserIdAndDate(int userId, LocalDate date);
 }

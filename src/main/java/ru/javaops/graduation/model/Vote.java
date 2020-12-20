@@ -1,12 +1,14 @@
 package ru.javaops.graduation.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static javax.persistence.FetchType.LAZY;
 import static org.hibernate.annotations.OnDeleteAction.CASCADE;
@@ -15,7 +17,10 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"}, name = "votes_unique_user_date_idx")})
 @Getter
 @Setter
+@NoArgsConstructor
 public class Vote extends AbstractBaseEntity {
+    public static final LocalTime VOTE_DEADLINE = LocalTime.of(11, 0);
+
     @Column(name = "date", nullable = false)
     @NotNull
     private LocalDate date = LocalDate.now();
@@ -32,21 +37,14 @@ public class Vote extends AbstractBaseEntity {
     @NotNull
     private Restaurant restaurant;
 
-    public Vote() {
+    public Vote(LocalDate date, User user, Restaurant restaurant) {
+        this(null, date, user, restaurant);
     }
 
-    public Vote(Integer id, LocalDate date) {
+    public Vote(Integer id, LocalDate date, User user, Restaurant restaurant) {
         super(id);
         this.date = date;
-    }
-
-    public Vote(LocalDate date) {
-        this(null, date);
-    }
-
-    public Vote(Integer id, LocalDate date, Restaurant restaurant) {
-        super(id);
-        this.date = date;
+        this.user = user;
         this.restaurant = restaurant;
     }
 

@@ -16,7 +16,7 @@ public class TestMatcher<T> {
     }
 
     public void assertMatch(T actual, T expected) {
-        assertThat(actual).usingRecursiveComparison().ignoringFields(fieldsToIgnore).isEqualTo(expected);
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, fieldsToIgnore);
     }
 
     public void assertMatch(Iterable<T> actual, T... expected) {

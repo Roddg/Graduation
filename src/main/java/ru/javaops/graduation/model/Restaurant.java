@@ -1,6 +1,7 @@
 package ru.javaops.graduation.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,8 +14,8 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurants_unique_name_idx")})
 @Getter
 @Setter
+@NoArgsConstructor
 public class Restaurant extends AbstractNamedEntity {
-
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private boolean enabled = true;
 
@@ -29,9 +30,6 @@ public class Restaurant extends AbstractNamedEntity {
     @OneToMany(fetch = LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
     private List<Vote> votes;
-
-    public Restaurant() {
-    }
 
     public Restaurant(Integer id, String name, boolean enabled, Date registered) {
         super(id, name);
@@ -51,8 +49,8 @@ public class Restaurant extends AbstractNamedEntity {
     public String toString() {
         return "Restaurant{" +
                 "id=" + id +
-                ", name='" + name +
-                "enabled=" + enabled +
+                ", name='" + name + "'" +
+                ", enabled=" + enabled +
                 '}';
     }
 }

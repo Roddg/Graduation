@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 
 @MappedSuperclass
+// http://stackoverflow.com/questions/594597/hibernate-annotations-which-is-better-field-or-property-access
 @Access(AccessType.FIELD)
 @Getter
 @Setter
@@ -27,6 +28,8 @@ public abstract class AbstractBaseEntity {
         this.id = id;
     }
 
+
+    // doesn't work for hibernate lazy proxy
     public int id() {
         Assert.notNull(id, "Entity must has id");
         return id;

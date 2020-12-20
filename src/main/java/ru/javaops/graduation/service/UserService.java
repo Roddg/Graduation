@@ -9,7 +9,8 @@ import org.springframework.util.Assert;
 import java.util.List;
 
 import static ru.javaops.graduation.util.RepositoryUtil.findById;
-import static ru.javaops.graduation.util.ValidationUtil.*;
+import static ru.javaops.graduation.util.ValidationUtil.checkNotFound;
+import static ru.javaops.graduation.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class UserService {
