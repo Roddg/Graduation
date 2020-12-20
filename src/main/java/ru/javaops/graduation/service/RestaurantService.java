@@ -2,51 +2,74 @@ package ru.javaops.graduation.service;
 
 import ru.javaops.graduation.model.Restaurant;
 import ru.javaops.graduation.repository.RestaurantRepository;
-import org.springframework.data.domain.Sort;
+import ru.javaops.graduation.repository.VoteRepository;
+import ru.javaops.graduation.to.RestaurantTo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.javaops.graduation.util.RepositoryUtil;
+import ru.javaops.graduation.util.ValidationUtil;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ru.javaops.graduation.util.RepositoryUtil.findById;
 import static ru.javaops.graduation.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
+@RequiredArgsConstructor
 public class RestaurantService {
-    private static final Sort SORT_NAME_REGISTERED = Sort.by(Sort.Direction.ASC, "name", "registered");
+    private final VoteRepository voteRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    private final RestaurantRepository repository;
-
-    public RestaurantService(RestaurantRepository repository) {
-        this.repository = repository;
-    }
-
+    @CacheEvict(value = "restaurantTos", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
-        return repository.save(restaurant);
+        return restaurantRepository.save(restaurant);
     }
 
+    @CacheEvict(value = "restaurantTos", allEntries = true)
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id) != 0, id);
+        ValidationUtil.checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
     }
 
     public Restaurant get(int id) {
-        return findById(repository, id);
+        return RepositoryUtil.findById(restaurantRepository, id);
     }
 
-    public List<Restaurant> getAll() {
-        return repository.findAll(SORT_NAME_REGISTERED);
+    /**
+     * Used to get restaurants with their daily dishes sorted by their daily rating (NOT overall!)
+     *
+     * @param date on which list is created
+     * @return list of RestaurantTo's sorted by their daily rating
+     */
+    @Cacheable("restaurantTos")
+    @Transactional
+    public List<RestaurantTo> getAllByDishesDate(LocalDate date) {
+        return restaurantRepository.getAllByDishesDate(date).stream()
+                .map(r -> new RestaurantTo(
+                        r.id(),
+                        r.getName(),
+                        r.getVotes().stream().filter(vote -> vote.getDate().isEqual(date)).count(),
+                        r.getDishes()))
+                .sorted(Comparator.comparing(RestaurantTo::getRating).reversed())
+                .collect(Collectors.toList());
     }
 
-    public List<Restaurant> getAllByDishesDate(LocalDate date) {return repository.getAllByDishesDate(date);}
-
+    @CacheEvict(value = "restaurantTos", allEntries = true)
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
-        checkNotFoundWithId(repository.save(restaurant), restaurant.id());
+        checkNotFoundWithId(restaurantRepository.save(restaurant), restaurant.id());
     }
 
-    public Restaurant getWithVotes(int id) {
-        return checkNotFoundWithId(repository.getWithVotes(id), id);
+    @CacheEvict(value = "restaurantTos", allEntries = true)
+    @Transactional
+    public void enable(int id, boolean enabled) {
+        Restaurant restaurant = get(id);
+        restaurant.setEnabled(enabled);
     }
 }

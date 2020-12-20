@@ -9,6 +9,6 @@ public class RepositoryUtil {
     }
 
     public static <T, K extends Integer> T findById(JpaRepository<T, K> repository, K id) {
-        return ValidationUtil.checkNotFoundWithId(repository.findById(id).orElse(null), id);
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 }

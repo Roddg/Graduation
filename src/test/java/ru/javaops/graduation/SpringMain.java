@@ -1,6 +1,5 @@
 package ru.javaops.graduation;
 
-
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.util.Arrays;

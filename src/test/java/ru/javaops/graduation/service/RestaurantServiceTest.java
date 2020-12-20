@@ -1,74 +1,71 @@
 package ru.javaops.graduation.service;
 
 import ru.javaops.graduation.model.Restaurant;
+import ru.javaops.graduation.to.RestaurantTo;
 import ru.javaops.graduation.util.exception.NotFoundException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import ru.javaops.graduation.DishTestData;
+import ru.javaops.graduation.RestaurantTestData;
 
 import java.util.List;
 
-import static ru.javaops.graduation.RestaurantTestData.*;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RestaurantServiceTest extends AbstractServiceTest {
+class RestaurantServiceTest extends AbstractServiceTest {
     @Autowired
     protected RestaurantService service;
 
     @Test
-    public void create() throws Exception {
-        Restaurant created = service.create(getNewRestaurant());
+    void create() throws Exception {
+        Restaurant created = service.create(RestaurantTestData.getNewRestaurant());
         int newId = created.id();
-        Restaurant newRestaurant = getNewRestaurant();
+        Restaurant newRestaurant = RestaurantTestData.getNewRestaurant();
         newRestaurant.setId(newId);
-        RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
-        RESTAURANT_MATCHER.assertMatch(service.get(newId), newRestaurant);
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(service.get(newId), newRestaurant);
     }
 
     @Test
-    public void duplicateNameCreate() throws Exception {
+    void duplicateNameCreate() throws Exception {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Restaurant(null, "Aragawa")));
     }
 
     @Test
-    public void delete() throws Exception {
-        service.delete(RESTAURANT_1_ID);
-        assertThrows(NotFoundException.class, () -> service.get(RESTAURANT_1_ID));
+    void delete() throws Exception {
+        service.delete(RestaurantTestData.RESTAURANT_1_ID);
+        assertThrows(NotFoundException.class, () -> service.get(RestaurantTestData.RESTAURANT_1_ID));
     }
 
     @Test
-    public void deleteNotFound() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND));
+    void deleteNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () -> service.delete(RestaurantTestData.NOT_FOUND));
     }
 
     @Test
-    public void get() throws Exception {
-        Restaurant restaurant = service.get(RESTAURANT_2_ID);
-        RESTAURANT_MATCHER.assertMatch(restaurant, RESTAURANT_2);
+    void get() throws Exception {
+        Restaurant restaurant = service.get(RestaurantTestData.RESTAURANT_2_ID);
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurant, RestaurantTestData.RESTAURANT_2);
     }
 
     @Test
-    public void getNotFound() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
+    void getNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () -> service.get(RestaurantTestData.NOT_FOUND));
     }
 
     @Test
-    public void update() throws Exception {
-        Restaurant updated = getUpdatedRestaurant();
+    void update() throws Exception {
+        Restaurant updated = RestaurantTestData.getUpdatedRestaurant();
         service.update(updated);
-        RESTAURANT_MATCHER.assertMatch(service.get(RESTAURANT_1_ID), getUpdatedRestaurant());
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(service.get(RestaurantTestData.RESTAURANT_1_ID), RestaurantTestData.getUpdatedRestaurant());
     }
 
     @Test
-    public void getAll() throws Exception {
-        List<Restaurant> all = service.getAll();
-        RESTAURANT_MATCHER.assertMatch(all, RESTAURANT_1, RESTAURANT_2, RESTAURANT_3, RESTAURANT_4);
-    }
+    void getAllByDishesDate() throws Exception {
+        List<RestaurantTo> allByDate = service.getAllByDishesDate(DishTestData.DISH_1.getDate());
 
-    @Test
-    public void getWithVotesNotFound() throws Exception {
-        assertThrows(NotFoundException.class,
-                () -> service.getWithVotes(NOT_FOUND));
+        allByDate.forEach(System.out::println);
     }
 }

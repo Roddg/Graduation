@@ -1,5 +1,7 @@
 package ru.javaops.graduation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import ru.javaops.graduation.HasId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +20,7 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Dish extends AbstractNamedEntity {
+public class Dish extends AbstractNamedEntity implements HasId {
     @Column(name = "price", nullable = false)
     @Positive
     private Long price;
@@ -31,6 +33,7 @@ public class Dish extends AbstractNamedEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = CASCADE)
     @NotNull
+    @JsonBackReference(value = "restaurantDishes")
     private Restaurant restaurant;
 
     public Dish(LocalDate date, String name, Long price, Restaurant restaurant) {

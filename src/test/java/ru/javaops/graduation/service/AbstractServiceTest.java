@@ -1,45 +1,28 @@
 package ru.javaops.graduation.service;
 
-import ru.javaops.graduation.TimingRules;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.rules.ExternalResource;
-import org.junit.rules.Stopwatch;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.test.context.ContextConfiguration;
+import ru.javaops.graduation.TimingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import ru.javaops.graduation.util.ValidationUtil;
 
-import static ru.javaops.graduation.util.ValidationUtil.getRootCause;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ContextConfiguration({
+@SpringJUnitConfig(locations = {
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-@RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ExtendWith(TimingExtension.class)
 abstract public class AbstractServiceTest {
 
-    @Autowired
-    public Environment environment;
-
-    @ClassRule
-    public static ExternalResource summary = TimingRules.SUMMARY;
-
-    @Rule
-    public Stopwatch stopwatch = TimingRules.STOPWATCH;
-
-    //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
     public <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
         assertThrows(rootExceptionClass, () -> {
             try {
                 runnable.run();
             } catch (Exception e) {
-                throw getRootCause(e);
+                throw ValidationUtil.getRootCause(e);
             }
         });
     }

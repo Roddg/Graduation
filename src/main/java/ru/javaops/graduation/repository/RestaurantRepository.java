@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.FETCH;
-
 @Repository
 @Transactional(readOnly = true)
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
@@ -22,9 +20,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     @Query("DELETE FROM Restaurant r WHERE r.id=:id")
     int delete(@Param("id") int id);
 
-    @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH r.votes WHERE r.id=:id")
-    Restaurant getWithVotes(@Param("id") int id);
-
-    @EntityGraph(value = "graph.restaurant.dishes", type = FETCH)
-    List<Restaurant> getAllByDishesDate(LocalDate date);
+    @EntityGraph(attributePaths = {"dishes", "votes"})
+    List<Restaurant> getAllByDishesDate(LocalDate dishesDate);
 }

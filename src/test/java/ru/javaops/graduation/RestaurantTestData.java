@@ -1,17 +1,16 @@
 package ru.javaops.graduation;
 
 import ru.javaops.graduation.model.Restaurant;
-
-import static ru.javaops.graduation.model.AbstractBaseEntity.START_SEQ;
+import ru.javaops.graduation.model.AbstractBaseEntity;
 
 public class RestaurantTestData {
-    public static TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingFieldsComparator("registered", "dishes", "votes");
+    public static TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingFieldsWithIgnoringAssertions(Restaurant.class, "registered", "dishes", "votes");
 
     public static final int NOT_FOUND = 10;
-    public static final int RESTAURANT_1_ID = START_SEQ + 2;
-    public static final int RESTAURANT_2_ID = START_SEQ + 3;
-    public static final int RESTAURANT_3_ID = START_SEQ + 4;
-    public static final int RESTAURANT_4_ID = START_SEQ + 5;
+    public static final int RESTAURANT_1_ID = AbstractBaseEntity.START_SEQ + 2;
+    public static final int RESTAURANT_2_ID = AbstractBaseEntity.START_SEQ + 3;
+    public static final int RESTAURANT_3_ID = AbstractBaseEntity.START_SEQ + 4;
+    public static final int RESTAURANT_4_ID = AbstractBaseEntity.START_SEQ + 5;
 
     public static final Restaurant RESTAURANT_1 = new Restaurant(RESTAURANT_1_ID, "Aragawa");
     public static final Restaurant RESTAURANT_2 = new Restaurant(RESTAURANT_2_ID, "Erarta");

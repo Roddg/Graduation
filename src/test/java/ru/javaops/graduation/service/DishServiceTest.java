@@ -3,81 +3,81 @@ package ru.javaops.graduation.service;
 import ru.javaops.graduation.model.Dish;
 import ru.javaops.graduation.util.exception.NotFoundException;
 import org.hsqldb.HsqlException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.javaops.graduation.DishTestData;
+import ru.javaops.graduation.RestaurantTestData;
+import ru.javaops.graduation.UserTestData;
 
-import static ru.javaops.graduation.DishTestData.*;
-import static ru.javaops.graduation.RestaurantTestData.*;
-import static ru.javaops.graduation.UserTestData.NOT_FOUND;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class DishServiceTest extends AbstractServiceTest {
+class DishServiceTest extends AbstractServiceTest {
     @Autowired
     protected DishService service;
 
     @Test
-    public void delete() throws Exception {
-        service.delete(DISH_1_ID, RESTAURANT_1_ID);
-        assertThrows(NotFoundException.class, () -> service.get(DISH_1_ID, RESTAURANT_1_ID));
+    void delete() throws Exception {
+        service.delete(DishTestData.DISH_1_ID, RestaurantTestData.RESTAURANT_1_ID);
+        assertThrows(NotFoundException.class, () -> service.get(DishTestData.DISH_1_ID, RestaurantTestData.RESTAURANT_1_ID));
     }
 
     @Test
-    public void deleteNotFound() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND, RESTAURANT_1_ID));
+    void deleteNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () -> service.delete(UserTestData.NOT_FOUND, RestaurantTestData.RESTAURANT_1_ID));
     }
 
     @Test
-    public void deleteNotOwn() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.delete(DISH_1_ID, RESTAURANT_2_ID));
+    void deleteNotOwn() throws Exception {
+        assertThrows(NotFoundException.class, () -> service.delete(DishTestData.DISH_1_ID, RestaurantTestData.RESTAURANT_2_ID));
     }
 
     @Test
-    public void create() throws Exception {
-        Dish created = service.create(getNewDish(), RESTAURANT_1_ID);
+    void create() throws Exception {
+        Dish created = service.create(DishTestData.getNewDish(), RestaurantTestData.RESTAURANT_1_ID);
         int newId = created.id();
-        Dish newDish = getNewDish();
+        Dish newDish = DishTestData.getNewDish();
         newDish.setId(newId);
-        DISH_MATCHER.assertMatch(created, newDish);
-        DISH_MATCHER.assertMatch(service.get(newId, RESTAURANT_1_ID), newDish);
+        DishTestData.DISH_MATCHER.assertMatch(created, newDish);
+        DishTestData.DISH_MATCHER.assertMatch(service.get(newId, RestaurantTestData.RESTAURANT_1_ID), newDish);
     }
 
     @Test
-    public void get() throws Exception {
-        Dish actual = service.get(DISH_1_ID, RESTAURANT_1_ID);
-        DISH_MATCHER.assertMatch(actual, DISH_1);
+    void get() throws Exception {
+        Dish actual = service.get(DishTestData.DISH_1_ID, RestaurantTestData.RESTAURANT_1_ID);
+        DishTestData.DISH_MATCHER.assertMatch(actual, DishTestData.DISH_1);
     }
 
     @Test
-    public void getNotFound() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, RESTAURANT_1_ID));
+    void getNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () -> service.get(UserTestData.NOT_FOUND, RestaurantTestData.RESTAURANT_1_ID));
     }
 
     @Test
-    public void getNotOwn() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.get(DISH_1_ID, RESTAURANT_2_ID));
+    void getNotOwn() throws Exception {
+        assertThrows(NotFoundException.class, () -> service.get(DishTestData.DISH_1_ID, RestaurantTestData.RESTAURANT_2_ID));
     }
 
     @Test
-    public void update() throws Exception {
-        Dish updated = getUpdatedDish();
-        service.update(updated, RESTAURANT_1_ID);
-        DISH_MATCHER.assertMatch(service.get(DISH_1_ID, RESTAURANT_1_ID), getUpdatedDish());
+    void update() throws Exception {
+        Dish updated = DishTestData.getUpdatedDish();
+        service.update(updated, RestaurantTestData.RESTAURANT_1_ID);
+        DishTestData.DISH_MATCHER.assertMatch(service.get(DishTestData.DISH_1_ID, RestaurantTestData.RESTAURANT_1_ID), DishTestData.getUpdatedDish());
     }
 
     @Test
-    public void updateNotOwn() throws Exception {
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(DISH_1, RESTAURANT_3_ID));
-        Assert.assertEquals("Not found entity with id=" + DISH_1_ID, exception.getMessage());
+    void updateNotOwn() throws Exception {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(DishTestData.DISH_1, RestaurantTestData.RESTAURANT_3_ID));
+        Assertions.assertEquals("Not found entity with id=" + DishTestData.DISH_1_ID, exception.getMessage());
     }
 
     @Test
-    public void getByRestaurantIdAndDate() throws Exception {
-        DISH_MATCHER.assertMatch(service.getByDate(DISH_TEST_DATE, RESTAURANT_1_ID), DISH_2, DISH_1, DISH_3);
+    void getByRestaurantIdAndDate() throws Exception {
+        DishTestData.DISH_MATCHER.assertMatch(service.getByDate(DishTestData.DISH_TEST_DATE, RestaurantTestData.RESTAURANT_1_ID), DishTestData.DISH_2, DishTestData.DISH_1, DishTestData.DISH_3);
     }
 
     @Test
-    public void createWithException() throws Exception {
-        validateRootCause(() -> service.create(new Dish(null, DISH_1.getDate(), DISH_1.getName(), 1000L, DISH_1.getRestaurant()), RESTAURANT_1_ID), HsqlException.class);
+    void createWithException() throws Exception {
+        validateRootCause(() -> service.create(new Dish(null, DishTestData.DISH_1.getDate(), DishTestData.DISH_1.getName(), 1000L, DishTestData.DISH_1.getRestaurant()), RestaurantTestData.RESTAURANT_1_ID), HsqlException.class);
     }
 }

@@ -1,6 +1,8 @@
 package ru.javaops.graduation.util;
 
+import ru.javaops.graduation.HasId;
 import ru.javaops.graduation.model.AbstractBaseEntity;
+import ru.javaops.graduation.util.exception.IllegalRequestDataException;
 import ru.javaops.graduation.util.exception.NotFoundException;
 
 public class ValidationUtil {
@@ -33,16 +35,14 @@ public class ValidationUtil {
         }
     }
 
-    public static void assureIdConsistent(AbstractBaseEntity entity, int id) {
-//      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
-        if (entity.isNew()) {
-            entity.setId(id);
-        } else if (entity.id() != id) {
-            throw new IllegalArgumentException(entity + " must be with id=" + id);
+    public static void assureIdConsistent(HasId bean, int id) {
+        if (bean.isNew()) {
+            bean.setId(id);
+        } else if (bean.id() != id) {
+            throw new IllegalRequestDataException(bean + " must be with id=" + id);
         }
     }
 
-    //  http://stackoverflow.com/a/28565320/548473
     public static Throwable getRootCause(Throwable t) {
         Throwable result = t;
         Throwable cause;
