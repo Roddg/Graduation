@@ -25,3 +25,29 @@ As a result, provide a link to github repository. It should contain the code, RE
 
 ---
 ##REST API
+
+Curl commands were tested using Git Bash
+
+###Admin Users API
+
+| Description | Method | Curl command                                      |
+|-------------|------|-------------------------------------------------------|
+| Get all    | GET | `curl -s http://localhost:8080/graduation/admin/users --user admin@gmail.com:admin`  |
+
+###User Profile API
+
+| Description | Method | Curl command                                      |
+|-------------|------|-------------------------------------------------------|
+| Register    | POST | `curl -s -X POST -d '{"name":"newName","email":"newemail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/profile/register`  |
+| Get own     | GET  | `curl -s http://localhost:8080/graduation/profile/ --user user@yandex.ru:password` |
+| Get user profile with votes     | GET  | `curl -s http://localhost:8080/graduation/profile/with-votes --user user@yandex.ru:password` |
+| Update      | PUT  | `curl -s -X PUT -d '{"name":"newName","email":"newemail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/profile/ --user user@yandex.ru:password` |
+| Delete      |DELETE| `curl -s -X DELETE http://localhost:8080/graduation/profile --user user@yandex.ru:password` |
+
+
+###Admin Restaurants API
+
+| Description | Method | Curl command                                      |
+|-------------|------|-------------------------------------------------------|
+| Get restaurants by date    | GET | `curl -s http://localhost:8080/graduation/restaurants/by?date=2020-12-10 --user admin@gmail.com:admin`  |
+
