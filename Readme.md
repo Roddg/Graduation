@@ -1,7 +1,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e735521926e34926aa08eca18c1e22bc)](https://www.codacy.com/gh/Roddg/graduation/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Roddg/graduation&amp;utm_campaign=Badge_Grade)
----
-Graduation project TopJava
----
+
+#Graduation project TopJava
+
 ![Bage](https://user-images.githubusercontent.com/7423323/98437301-76c39300-2124-11eb-8c4d-9b47489c902a.png)
 
 Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**.
@@ -23,8 +23,9 @@ Each restaurant provides a new menu each day.
 
 As a result, provide a link to github repository. It should contain the code, README.md with API documentation and couple curl commands to test it.
 
----
+
 ##REST API
+
 
 Curl commands were tested using Git Bash
 
@@ -33,6 +34,12 @@ Curl commands were tested using Git Bash
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
 | Get all    | GET | `curl -s http://localhost:8080/graduation/admin/users --user admin@gmail.com:admin`  |
+| Get with id    | GET | `curl -s http://localhost:8080/graduation/admin/users/100000 --user admin@gmail.com:admin`  |
+| Get by email    | GET | `curl -s http://localhost:8080/graduation/admin/users/by?email=user@yandex.ru --user admin@gmail.com:admin`  |
+| Create new user    | POST | `curl -s -X POST -d '{"name":"newName","email":"newemail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/users --user admin@gmail.com:admin`  |
+| Update    | PUT | `curl -s -X PUT -d '{"name":"newName","email":"newemail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/users/100000 --user admin@gmail.com:admin`  |
+| Delete    | DELETE | `curl -s -X DELETE http://localhost:8080/graduation/admin/users/100000 --user admin@gmail.com:admin`  |
+| Enable/disable    | PATCH | `curl -s -X PATCH http://localhost:8080/graduation/admin/users/100000?enabled=false --user admin@gmail.com:admin`  |
 
 ###User Profile API
 
@@ -45,9 +52,13 @@ Curl commands were tested using Git Bash
 | Delete      |DELETE| `curl -s -X DELETE http://localhost:8080/graduation/profile --user user@yandex.ru:password` |
 
 
-###Admin Restaurants API
+###Restaurants API
 
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
+| Get all restaurants    | GET | `curl -s http://localhost:8080/graduation/restaurants --user admin@gmail.com:admin`  |
 | Get restaurants by date    | GET | `curl -s http://localhost:8080/graduation/restaurants/by?date=2020-12-10 --user admin@gmail.com:admin`  |
+| Vote for restaurant    | POST | `curl -s -X POST http://localhost:8080/graduation/votes?restaurantId=100002 --user admin@gmail.com:admin`  |
+| Get restaurant with id    | GET | `curl -s http://localhost:8080/graduation/admin/restaurants/100002 --user admin@gmail.com:admin`  |
 
+###Dishes API
