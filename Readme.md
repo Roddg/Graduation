@@ -60,5 +60,14 @@ Curl commands were tested using Git Bash
 | Get restaurants by date    | GET | `curl -s http://localhost:8080/graduation/restaurants/by?date=2020-12-10 --user admin@gmail.com:admin`  |
 | Vote for restaurant    | POST | `curl -s -X POST http://localhost:8080/graduation/votes?restaurantId=100002 --user admin@gmail.com:admin`  |
 | Get restaurant with id    | GET | `curl -s http://localhost:8080/graduation/admin/restaurants/100002 --user admin@gmail.com:admin`  |
+| Create restaurant    | POST | `curl -s -X POST -d '{"name":"New","enabled":true,"registered":"2020-12-26T17:28:39.214+00:00"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/ --user admin@gmail.com:admin`  |
+| Update restaurant    | PUT | `curl -s -X PUT -d '{"id":100002,"name":"UpdatedName","enabled":true,"registered":"2020-12-26T17:30:01.415+00:00"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002 --user admin@gmail.com:admin`  |
+| Delete restaurant    | DELETE | `curl -s -X DELETE 'http://localhost:8080/graduation/admin/restaurants/100002' --user admin@gmail.com:admin`  |
+| Enable/disable restaurant    | PATCH | `curl -s -X PATCH 'http://localhost:8080/graduation/admin/restaurants/100002?enabled=false' --user admin@gmail.com:admin`  |
 
 ###Dishes API
+
+| Get restaurant's dish    | GET | `curl -s 'http://localhost:8080/graduation/admin/restaurants/100002/dishes/100013' --user admin@gmail.com:admin`  |
+| Create new dish    | POST | `curl -s -X POST -d '{"name":"New","price":1000,"date":"2020-12-26"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002/dishes --user admin@gmail.com:admin`  |
+| Update dish    | PUT | `curl -s -X PUT -d '{"id":100013,"name":"UpdatedName","price":500,"date":"2020-12-10"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002/dishes/100013 --user admin@gmail.com:admin`  |
+| Delete dish    | DELETE | `curl -s -X DELETE 'http://localhost:8080/graduation/admin/restaurants/100002/dishes/100013' --user admin@gmail.com:admin`  |
