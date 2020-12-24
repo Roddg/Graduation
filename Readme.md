@@ -26,7 +26,6 @@ As a result, provide a link to github repository. It should contain the code, RE
 
 ##REST API
 
-
 Curl commands were tested using Git Bash
 
 ###Admin Users API
@@ -67,6 +66,8 @@ Curl commands were tested using Git Bash
 
 ###Dishes API
 
+| Description | Method | Curl command                                      |
+|-------------|------|-------------------------------------------------------|
 | Get restaurant's dish    | GET | `curl -s 'http://localhost:8080/graduation/admin/restaurants/100002/dishes/100013' --user admin@gmail.com:admin`  |
 | Create new dish    | POST | `curl -s -X POST -d '{"name":"New","price":1000,"date":"2020-12-26"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002/dishes --user admin@gmail.com:admin`  |
 | Update dish    | PUT | `curl -s -X PUT -d '{"id":100013,"name":"UpdatedName","price":500,"date":"2020-12-10"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002/dishes/100013 --user admin@gmail.com:admin`  |
