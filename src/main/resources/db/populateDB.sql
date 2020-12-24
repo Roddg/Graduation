@@ -27,7 +27,7 @@ VALUES (100000, 100002, '2020-12-10'),
        (100001, 100003, '2020-12-10'),
        (100001, 100003, '2020-12-11'),
        (100001, 100005, '2020-12-12'),
-       (100001, 100002, '2020-12-13');
+       (100001, 100002, now());
 
 INSERT INTO dishes (restaurant_id, name, price, date)
 VALUES (100002, 'Salmon tartare with daikon', 660, '2020-12-10'),
@@ -39,7 +39,7 @@ VALUES (100002, 'Salmon tartare with daikon', 660, '2020-12-10'),
        (100002, 'Asparagus on carrot puree', 650, '2020-12-12'),
        (100002, 'Belgian Waffles', 375, '2020-12-12'),
        (100003, 'California Roll', 1000, '2020-12-10'),
-       (100003, 'Philly roll', 1200, '2020-12-10'),
+       (100003, 'Philly roll', 1200, now()),
        (100003, 'Combo box', 700, '2020-12-10'),
        (100003, 'California Roll', 1000, '2020-12-11'),
        (100003, 'Philly roll', 1200, '2020-12-11'),
@@ -47,10 +47,10 @@ VALUES (100002, 'Salmon tartare with daikon', 660, '2020-12-10'),
        (100003, 'California Roll', 1000, '2020-12-12'),
        (100003, 'Philly roll', 1200, '2020-12-12'),
        (100003, 'Combo box', 700, '2020-12-12'),
-       (100003, 'California Roll', 1000, '2020-12-13'),
+       (100003, 'California Roll', 1000, now()),
        (100003, 'Philly roll', 1200, '2020-12-13'),
        (100003, 'Combo box', 700, '2020-12-13'),
        (100004, 'Double burger', 290, '2020-12-10'),
        (100004, 'Double burger', 290, '2020-12-11'),
        (100004, 'Double burger', 290, '2020-12-12'),
-       (100004, 'Double burger', 290, '2020-12-13');
+       (100004, 'Double burger', 290, now());

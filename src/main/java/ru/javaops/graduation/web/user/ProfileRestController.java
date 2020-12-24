@@ -17,7 +17,7 @@ import java.net.URI;
 @RestController
 @RequestMapping(value = ProfileRestController.REST_URL)
 public class ProfileRestController extends AbstractUserController {
-    static final String REST_URL = "/profile";
+    public static final String REST_URL = "/profile";
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)

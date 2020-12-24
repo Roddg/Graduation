@@ -5,24 +5,12 @@ import org.springframework.util.StringUtils;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 public class DateTimeUtil {
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 
-    private static final LocalDateTime MIN_DATE = LocalDateTime.of(1, 1, 1, 0, 0);
-    private static final LocalDateTime MAX_DATE = LocalDateTime.of(3000, 1, 1, 0, 0);
-
     private DateTimeUtil() {
-    }
-
-    public static LocalDateTime atStartOfDayOrMin(LocalDate localDate) {
-        return localDate != null ? localDate.atStartOfDay() : MIN_DATE;
-    }
-
-    public static LocalDateTime atStartOfNextDayOrMax(LocalDate localDate) {
-        return localDate != null ? localDate.plus(1, ChronoUnit.DAYS).atStartOfDay() : MAX_DATE;
     }
 
     public static String toString(LocalDateTime ldt) {

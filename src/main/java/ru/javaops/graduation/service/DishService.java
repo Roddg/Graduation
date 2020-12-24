@@ -1,5 +1,6 @@
 package ru.javaops.graduation.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.graduation.model.Dish;
 import ru.javaops.graduation.repository.DishRepository;
 import ru.javaops.graduation.repository.RestaurantRepository;
@@ -31,6 +32,7 @@ public class DishService {
     }
 
     @CacheEvict(value = "restaurantTos", allEntries = true)
+    @Transactional
     public Dish update(@Valid Dish dish, int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         ValidationUtil.checkNotFoundWithId(get(dish.id(), restaurantId), dish.id());
@@ -38,6 +40,7 @@ public class DishService {
         return checkNotFoundWithId(dishRepository.save(dish), dish.id());
     }
 
+    @CacheEvict(value = "restaurantTos", allEntries = true)
     public void delete(int id, int restaurantId) {
         ValidationUtil.checkNotFoundWithId(dishRepository.delete(id, restaurantId) != 0, id);
     }
