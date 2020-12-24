@@ -24,11 +24,11 @@ Each restaurant provides a new menu each day.
 As a result, provide a link to github repository. It should contain the code, README.md with API documentation and couple curl commands to test it.
 
 
-##REST API
+## REST API
 
 Curl commands were tested using Git Bash
 
-###Admin Users API
+### Admin Users API
 
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
@@ -40,7 +40,7 @@ Curl commands were tested using Git Bash
 | Delete    | DELETE | `curl -s -X DELETE http://localhost:8080/graduation/admin/users/100000 --user admin@gmail.com:admin`  |
 | Enable/disable    | PATCH | `curl -s -X PATCH http://localhost:8080/graduation/admin/users/100000?enabled=false --user admin@gmail.com:admin`  |
 
-###User Profile API
+### User Profile API
 
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
@@ -51,7 +51,7 @@ Curl commands were tested using Git Bash
 | Delete      |DELETE| `curl -s -X DELETE http://localhost:8080/graduation/profile --user user@yandex.ru:password` |
 
 
-###Restaurants API
+### Restaurants API
 
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
@@ -64,7 +64,7 @@ Curl commands were tested using Git Bash
 | Delete restaurant    | DELETE | `curl -s -X DELETE 'http://localhost:8080/graduation/admin/restaurants/100002' --user admin@gmail.com:admin`  |
 | Enable/disable restaurant    | PATCH | `curl -s -X PATCH 'http://localhost:8080/graduation/admin/restaurants/100002?enabled=false' --user admin@gmail.com:admin`  |
 
-###Dishes API
+### Dishes API
 
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
