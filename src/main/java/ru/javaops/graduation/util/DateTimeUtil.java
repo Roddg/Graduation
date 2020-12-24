@@ -19,12 +19,12 @@ public class DateTimeUtil {
 
     public static @Nullable
     LocalDate parseLocalDate(@Nullable String str) {
-        return StringUtils.isEmpty(str) ? null : LocalDate.parse(str);
+        return !StringUtils.hasText(str) ? null : LocalDate.parse(str);
     }
 
     public static @Nullable
     LocalTime parseLocalTime(@Nullable String str) {
-        return StringUtils.isEmpty(str) ? null : LocalTime.parse(str);
+        return !StringUtils.hasText(str) ? null : LocalTime.parse(str);
     }
 
     public static Clock createClock(LocalDate date, LocalTime time) {
