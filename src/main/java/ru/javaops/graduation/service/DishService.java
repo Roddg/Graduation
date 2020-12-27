@@ -24,6 +24,7 @@ public class DishService {
     private final RestaurantRepository restaurantRepository;
 
     @CacheEvict(value = "restaurantTos", allEntries = true)
+    @Transactional
     public Dish create(@Valid Dish dish, int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         ValidationUtil.checkNew(dish);

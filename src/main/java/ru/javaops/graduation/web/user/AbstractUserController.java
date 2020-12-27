@@ -2,7 +2,9 @@ package ru.javaops.graduation.web.user;
 
 import ru.javaops.graduation.HasId;
 import ru.javaops.graduation.model.User;
+import ru.javaops.graduation.model.Vote;
 import ru.javaops.graduation.service.UserService;
+import ru.javaops.graduation.service.VoteService;
 import ru.javaops.graduation.to.UserTo;
 import ru.javaops.graduation.util.UserUtil;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import ru.javaops.graduation.util.ValidationUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public abstract class AbstractUserController {
@@ -21,7 +24,10 @@ public abstract class AbstractUserController {
     private WebDataBinder binder;
 
     @Autowired
-    protected UserService service;
+    protected UserService userService;
+
+    @Autowired
+    protected VoteService voteService;
 
     @Autowired
     private UniqueMailValidator emailValidator;
@@ -36,18 +42,18 @@ public abstract class AbstractUserController {
 
     public List<User> getAll() {
         log.info("getAll");
-        return service.getAll();
+        return userService.getAll();
     }
 
     public User get(int id) {
         log.info("get {}", id);
-        return service.get(id);
+        return userService.get(id);
     }
 
     public User create(User user) {
         log.info("create {}", user);
         ValidationUtil.checkNew(user);
-        return service.create(user);
+        return userService.create(user);
     }
 
     public User create(UserTo userTo) {
@@ -57,7 +63,7 @@ public abstract class AbstractUserController {
 
     public void delete(int id) {
         log.info("delete {}", id);
-        service.delete(id);
+        userService.delete(id);
     }
 
     protected void checkAndValidateForUpdate(HasId user, int id) throws BindException {
@@ -72,21 +78,35 @@ public abstract class AbstractUserController {
     public void update(User user, int id) throws BindException {
         log.info("update {} with id={}", user, id);
         ValidationUtil.assureIdConsistent(user, id);
-        service.update(user);
+        userService.update(user);
     }
 
     public User getByMail(String email) {
         log.info("getByEmail {}", email);
-        return service.getByEmail(email);
+        return userService.getByEmail(email);
     }
 
     public void enable(int id, boolean enabled) {
         log.info(enabled ? "enable {}" : "disable {}", id);
-        service.enable(id, enabled);
+        userService.enable(id, enabled);
     }
 
     public User getWithVotes(int id) {
         log.info("getWithVotes {}", id);
-        return service.getWithVotes(id);
+        return userService.getWithVotes(id);
+    }
+
+    public Vote getTodayVote(int id) {
+        return getVoteByDate(id, LocalDate.now());
+    }
+
+    public Vote getVoteByDate(int id, LocalDate date) {
+        log.info("getVoteByDate for {} by {}", id, date);
+        return voteService.getByUserIdAndDate(id, date);
+    }
+
+    public List<Vote> getAllVotes(int id) {
+        log.info("getAllVotes {}", id);
+        return voteService.getAll(id);
     }
 }

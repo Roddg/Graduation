@@ -7,14 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.javaops.graduation.model.Vote;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestController extends AbstractUserController {
     public static final String REST_URL = "/admin/users";
+
+    public static final String VOTE_URL = "/votes";
 
     @Override
     @GetMapping
@@ -47,7 +51,7 @@ public class AdminRestController extends AbstractUserController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@RequestBody User user, @PathVariable int id) throws BindException {
         checkAndValidateForUpdate(user, id);
-        service.update(user);
+        userService.update(user);
     }
 
     @Override
@@ -67,5 +71,20 @@ public class AdminRestController extends AbstractUserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         super.delete(id);
+    }
+
+    @GetMapping("/{id}" + VOTE_URL + "/today")
+    public Vote getTodayVote(@PathVariable int id) {
+        return super.getTodayVote(id);
+    }
+
+    @GetMapping("/{id}" + VOTE_URL)
+    public List<Vote> getAllVotes(@PathVariable int id) {
+        return super.getAllVotes(id);
+    }
+
+    @GetMapping("/{id}" + VOTE_URL + "/by")
+    public Vote getByDate(@PathVariable int id, @RequestParam LocalDate date) {
+        return super.getVoteByDate(id, date);
     }
 }

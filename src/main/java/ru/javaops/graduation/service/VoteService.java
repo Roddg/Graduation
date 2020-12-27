@@ -10,20 +10,26 @@ import ru.javaops.graduation.util.exception.NotFoundException;
 import ru.javaops.graduation.util.exception.VoteDeadlineException;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
-import ru.javaops.graduation.util.RepositoryUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static ru.javaops.graduation.model.Vote.VOTE_DEADLINE;
+import static ru.javaops.graduation.util.RepositoryUtil.findById;
 import static ru.javaops.graduation.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 @RequiredArgsConstructor
 public class VoteService {
+    protected final Logger log = LoggerFactory.getLogger(getClass());
+
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
@@ -32,24 +38,34 @@ public class VoteService {
     private Clock clock = Clock.systemDefaultZone();
 
     @CacheEvict(value = "restaurantTos", allEntries = true)
+    @Transactional
     public Vote vote(int userId, int restaurantId) {
         LocalDateTime votingLocalDateTime = LocalDateTime.now(clock);
+        final Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getOne(restaurantId), restaurantId);
+        final User user = checkNotFoundWithId(userRepository.getOne(userId), userId);
+        Vote vote;
         try {
-            Vote vote = checkNotFoundWithId(voteRepository.getByUserIdAndDate(userId, votingLocalDateTime.toLocalDate()), userId);
-            if (votingLocalDateTime.toLocalTime().isBefore(Vote.VOTE_DEADLINE)) {
-                if (vote.getRestaurant().id() != restaurantId) {
-                    vote.setRestaurant(RepositoryUtil.findById(restaurantRepository, restaurantId));
-                    return voteRepository.save(vote);
-                }
-                return vote;
-            } else {
-                throw new VoteDeadlineException("Vote deadline has already passed");
-            }
+            vote = getByUserAndDate(user, votingLocalDateTime.toLocalDate());
         } catch (NotFoundException e) {
-            final Restaurant restaurant = RepositoryUtil.findById(restaurantRepository, restaurantId);
-            final User user = RepositoryUtil.findById(userRepository, userId);
+            log.debug("new vote from user {} for {}", userId, restaurantId);
             return voteRepository.save(new Vote(null, votingLocalDateTime.toLocalDate(), user, restaurant));
         }
+
+        if (votingLocalDateTime.toLocalTime().isBefore(VOTE_DEADLINE)) {
+            if (vote.getRestaurant().id() != restaurantId) {
+                log.debug("vote from user {} for restaurant {} was changed", userId, restaurantId);
+                vote.setRestaurant(restaurant);
+                return vote;
+            }
+            log.debug("vote from user {} for restaurant {} not changed", userId, restaurantId);
+            return vote;
+        } else {
+            throw new VoteDeadlineException("Vote deadline has already passed");
+        }
+    }
+
+    public Vote getByUserAndDate(User user, LocalDate date) {
+        return checkNotFoundWithId(voteRepository.getByUserAndDate(user, date), user.id());
     }
 
     public Vote getByUserIdAndDate(int userId, LocalDate date) {

@@ -32,33 +32,33 @@ Curl commands were tested using Git Bash
 
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
-| Get all    | GET | `curl -s http://localhost:8080/graduation/admin/users --user admin@gmail.com:admin`  |
-| Get with id    | GET | `curl -s http://localhost:8080/graduation/admin/users/100000 --user admin@gmail.com:admin`  |
-| Get by email    | GET | `curl -s http://localhost:8080/graduation/admin/users/by?email=user@yandex.ru --user admin@gmail.com:admin`  |
+| Get all    | GET | `curl -s 'http://localhost:8080/graduation/admin/users' --user admin@gmail.com:admin`  |
+| Get with id    | GET | `curl -s 'http://localhost:8080/graduation/admin/users/100000' --user admin@gmail.com:admin`  |
+| Get by email    | GET | `curl -s 'http://localhost:8080/graduation/admin/users/by?email=user@yandex.ru' --user admin@gmail.com:admin`  |
 | Create new user    | POST | `curl -s -X POST -d '{"name":"newName","email":"newemail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/users --user admin@gmail.com:admin`  |
 | Update    | PUT | `curl -s -X PUT -d '{"name":"newName","email":"newemail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/users/100000 --user admin@gmail.com:admin`  |
-| Delete    | DELETE | `curl -s -X DELETE http://localhost:8080/graduation/admin/users/100000 --user admin@gmail.com:admin`  |
-| Enable/disable    | PATCH | `curl -s -X PATCH http://localhost:8080/graduation/admin/users/100000?enabled=false --user admin@gmail.com:admin`  |
+| Delete    | DELETE | `curl -s -X DELETE 'http://localhost:8080/graduation/admin/users/100000' --user admin@gmail.com:admin`  |
+| Enable/disable    | PATCH | `curl -s -X PATCH 'http://localhost:8080/graduation/admin/users/100000?enabled=false' --user admin@gmail.com:admin`  |
 
 ### User Profile API
 
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
 | Register    | POST | `curl -s -X POST -d '{"name":"newName","email":"newemail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/profile/register`  |
-| Get own     | GET  | `curl -s http://localhost:8080/graduation/profile/ --user user@yandex.ru:password` |
-| Get user profile with votes     | GET  | `curl -s http://localhost:8080/graduation/profile/with-votes --user user@yandex.ru:password` |
+| Get own     | GET  | `curl -s 'http://localhost:8080/graduation/profile' --user user@yandex.ru:password` |
+| Get user profile with votes     | GET  | `curl -s 'http://localhost:8080/graduation/profile/with-votes' --user user@yandex.ru:password` |
 | Update      | PUT  | `curl -s -X PUT -d '{"name":"newName","email":"newemail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/profile/ --user user@yandex.ru:password` |
-| Delete      |DELETE| `curl -s -X DELETE http://localhost:8080/graduation/profile --user user@yandex.ru:password` |
+| Delete      |DELETE| `curl -s -X DELETE 'http://localhost:8080/graduation/profile' --user user@yandex.ru:password` |
 
 
 ### Restaurants API
 
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
-| Get all restaurants    | GET | `curl -s http://localhost:8080/graduation/restaurants --user admin@gmail.com:admin`  |
-| Get restaurants by date    | GET | `curl -s http://localhost:8080/graduation/restaurants/by?date=2020-12-10 --user admin@gmail.com:admin`  |
-| Vote for restaurant    | POST | `curl -s -X POST http://localhost:8080/graduation/votes?restaurantId=100002 --user admin@gmail.com:admin`  |
-| Get restaurant with id    | GET | `curl -s http://localhost:8080/graduation/admin/restaurants/100002 --user admin@gmail.com:admin`  |
+| Get all restaurants    | GET | `curl -s 'http://localhost:8080/graduation/restaurants' --user admin@gmail.com:admin`  |
+| Get restaurants by date    | GET | `curl -s 'http://localhost:8080/graduation/restaurants/by?date=2020-12-10' --user admin@gmail.com:admin`  |
+| Vote for restaurant    | POST | `curl -s -X POST 'http://localhost:8080/graduation/votes?restaurantId=100002' --user user@yandex.ru:password`  |
+| Get restaurant with id    | GET | `curl -s 'http://localhost:8080/graduation/admin/restaurants/100002' --user admin@gmail.com:admin`  |
 | Create restaurant    | POST | `curl -s -X POST -d '{"name":"New","enabled":true,"registered":"2020-12-26T17:28:39.214+00:00"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/ --user admin@gmail.com:admin`  |
 | Update restaurant    | PUT | `curl -s -X PUT -d '{"id":100002,"name":"UpdatedName","enabled":true,"registered":"2020-12-26T17:30:01.415+00:00"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002 --user admin@gmail.com:admin`  |
 | Delete restaurant    | DELETE | `curl -s -X DELETE 'http://localhost:8080/graduation/admin/restaurants/100002' --user admin@gmail.com:admin`  |
@@ -69,6 +69,18 @@ Curl commands were tested using Git Bash
 | Description | Method | Curl command                                      |
 |-------------|------|-------------------------------------------------------|
 | Get restaurant's dish    | GET | `curl -s 'http://localhost:8080/graduation/admin/restaurants/100002/dishes/100013' --user admin@gmail.com:admin`  |
+| Get all dishes for restaurant    | GET | `curl -s 'http://localhost:8080/graduation/admin/restaurants/100002/dishes/' --user admin@gmail.com:admin`  |
 | Create new dish    | POST | `curl -s -X POST -d '{"name":"New","price":1000,"date":"2020-12-26"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002/dishes --user admin@gmail.com:admin`  |
 | Update dish    | PUT | `curl -s -X PUT -d '{"id":100013,"name":"UpdatedName","price":500,"date":"2020-12-10"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002/dishes/100013 --user admin@gmail.com:admin`  |
 | Delete dish    | DELETE | `curl -s -X DELETE 'http://localhost:8080/graduation/admin/restaurants/100002/dishes/100013' --user admin@gmail.com:admin`  |
+
+### Votes API
+
+| Description | Method | Curl command                                      |
+|-------------|------|-------------------------------------------------------|
+| Get votes    | GET | `curl -s  'http://localhost:8080/graduation/profile/votes/' --user admin@gmail.com:admin`  |
+| Get today's vote    | GET | `curl -s  'http://localhost:8080/graduation/profile/votes/today' --user admin@gmail.com:admin`  |
+| Get vote by date    | GET | `curl -s  'http://localhost:8080/graduation/profile/votes/by?date=2020-12-11' --user admin@gmail.com:admin`  |
+| Get user votes    | GET | `curl -s  'http://localhost:8080/graduation/admin/users/100000/votes/' --user admin@gmail.com:admin`  |
+| Get user's vote today    | GET | `curl -s  'http://localhost:8080/graduation/admin/users/100001/votes/today' --user admin@gmail.com:admin`  |
+| Get users vote by date    | GET | `curl -s  'http://localhost:8080/graduation/admin/users/100001/votes/by?date=2020-12-11' --user admin@gmail.com:admin`  |

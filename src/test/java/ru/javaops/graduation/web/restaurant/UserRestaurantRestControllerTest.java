@@ -4,13 +4,13 @@ import ru.javaops.graduation.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javaops.graduation.DishTestData;
 import ru.javaops.graduation.TestUtil;
-import ru.javaops.graduation.UserTestData;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.javaops.graduation.DishTestData.DISH_1;
+import static ru.javaops.graduation.UserTestData.USER;
 
 class UserRestaurantRestControllerTest extends AbstractControllerTest {
 
@@ -19,7 +19,7 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
-                .with(TestUtil.userHttpBasic(UserTestData.USER)))
+                .with(TestUtil.userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
@@ -27,8 +27,8 @@ class UserRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllByDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/by?date=" + DishTestData.DISH_1.getDate())
-                .with(TestUtil.userHttpBasic(UserTestData.USER)))
+        perform(MockMvcRequestBuilders.get(REST_URL + "/by?date=" + DISH_1.getDate())
+                .with(TestUtil.userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));

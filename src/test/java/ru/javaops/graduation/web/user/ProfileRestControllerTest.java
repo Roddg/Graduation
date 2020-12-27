@@ -19,6 +19,13 @@ import ru.javaops.graduation.UserTestData;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.javaops.graduation.TestUtil.userHttpBasic;
+import static ru.javaops.graduation.UserTestData.ADMIN;
+import static ru.javaops.graduation.UserTestData.USER;
+import static ru.javaops.graduation.VoteTestData.VOTE_1;
+import static ru.javaops.graduation.VoteTestData.VOTE_LAZY_MATCHER;
+import static ru.javaops.graduation.web.user.ProfileRestController.REST_URL;
+import static ru.javaops.graduation.web.user.ProfileRestController.VOTE_URL;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
     @Autowired
@@ -26,8 +33,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     void test() throws Exception {
-        ResultActions resultActions = perform(MockMvcRequestBuilders.get(ProfileRestController.REST_URL)
-                .with(TestUtil.userHttpBasic(UserTestData.USER)))
+        ResultActions resultActions = perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk());
 
         User user = TestUtil.readFromJson(resultActions, User.class);
@@ -36,32 +43,32 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(ProfileRestController.REST_URL)
-                .with(TestUtil.userHttpBasic(UserTestData.USER)))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.USER_MATCHER.contentJson(UserTestData.USER));
+                .andExpect(UserTestData.USER_MATCHER.contentJson(USER));
     }
 
     @Test
     void getUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.get(ProfileRestController.REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(ProfileRestController.REST_URL)
-                .with(TestUtil.userHttpBasic(UserTestData.USER)))
+        perform(MockMvcRequestBuilders.delete(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isNoContent());
-        UserTestData.USER_MATCHER.assertMatch(userService.getAll(), UserTestData.ADMIN);
+        UserTestData.USER_MATCHER.assertMatch(userService.getAll(), ADMIN);
     }
 
     @Test
     void register() throws Exception {
         UserTo newTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
         User newUser = UserUtil.createNewFromTo(newTo);
-        ResultActions action = perform(MockMvcRequestBuilders.post(ProfileRestController.REST_URL + "/register")
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newTo)))
                 .andDo(print())
@@ -77,31 +84,59 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "user@yandex.ru", "newPassword");
-        perform(MockMvcRequestBuilders.put(ProfileRestController.REST_URL).contentType(MediaType.APPLICATION_JSON)
-                .with(TestUtil.userHttpBasic(UserTestData.USER))
+        perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        UserTestData.USER_MATCHER.assertMatch(userService.get(UserTestData.USER_ID), UserUtil.updateFromTo(new User(UserTestData.USER), updatedTo));
+        UserTestData.USER_MATCHER.assertMatch(userService.get(UserTestData.USER_ID), UserUtil.updateFromTo(new User(USER), updatedTo));
     }
 
     @Test
     void getWithVotes() throws Exception {
-        perform(MockMvcRequestBuilders.get(ProfileRestController.REST_URL + "/with-votes")
-                .with(TestUtil.userHttpBasic(UserTestData.USER)))
+        perform(MockMvcRequestBuilders.get(REST_URL + "/with-votes")
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.USER_MATCHER.contentJson(UserTestData.USER));
+                .andExpect(UserTestData.USER_MATCHER.contentJson(USER));
+    }
+
+    @Test
+    void getTodayVote() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + VOTE_URL + "/today")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void getAllVotes() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + VOTE_URL)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void getVoteByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + VOTE_URL + "/by?date=" + VOTE_1.getDate())
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTE_LAZY_MATCHER.contentJson(VOTE_1));
     }
 
     @Test
     void updateInvalid() throws Exception {
         UserTo updatedTo = new UserTo(null, null, "password", null);
-        perform(MockMvcRequestBuilders.put(ProfileRestController.REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(TestUtil.userHttpBasic(UserTestData.USER))
+                .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -111,8 +146,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     void updateDuplicate() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword");
-        perform(MockMvcRequestBuilders.put(ProfileRestController.REST_URL).contentType(MediaType.APPLICATION_JSON)
-                .with(TestUtil.userHttpBasic(UserTestData.USER))
+        perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());

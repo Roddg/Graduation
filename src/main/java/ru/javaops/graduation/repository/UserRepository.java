@@ -1,5 +1,6 @@
 package ru.javaops.graduation.repository;
 
+import org.springframework.cache.annotation.Cacheable;
 import ru.javaops.graduation.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("DELETE FROM User u WHERE u.id=:id")
     int delete(@Param("id") int id);
 
+    @Cacheable("users")
     User getByEmail(String email);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.votes WHERE u.id=:id")

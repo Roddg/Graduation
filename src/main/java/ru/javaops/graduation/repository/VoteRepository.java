@@ -1,7 +1,7 @@
 package ru.javaops.graduation.repository;
 
+import ru.javaops.graduation.model.User;
 import ru.javaops.graduation.model.Vote;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +18,7 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.date DESC")
     List<Vote> getAll(@Param("userId") int userId);
 
-    @EntityGraph(attributePaths = {"restaurant", "user"}, type = EntityGraph.EntityGraphType.LOAD)
-    Vote getByUserIdAndDate(int userId, LocalDate date);
+    Vote getByUserAndDate(User user, LocalDate date);
+
+    Vote getByUserIdAndDate(int userId, LocalDate localDate);
 }

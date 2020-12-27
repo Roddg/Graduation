@@ -26,12 +26,9 @@ public class RestaurantTo extends BaseTo implements HasId {
     @Positive
     private long rating;
 
-    private Set<Dish> dailyMenu;
-
-    public RestaurantTo(int id, String name, long rating, Set<Dish> dailyMenu) {
+    public RestaurantTo(int id, String name, long rating) {
         super(id);
         this.name = name;
         this.rating = rating;
-        this.dailyMenu = dailyMenu;
     }
 }
