@@ -10,7 +10,7 @@ import java.util.List;
 
 import static ru.javaops.graduation.UserTestData.USER_ID;
 import static ru.javaops.graduation.VoteTestData.*;
-import static ru.javaops.graduation.model.Vote.VOTE_DEADLINE;
+import static ru.javaops.graduation.service.VoteService.VOTE_DEADLINE;
 import static ru.javaops.graduation.util.DateTimeUtil.createClock;
 
 class VoteServiceTest extends AbstractServiceTest {

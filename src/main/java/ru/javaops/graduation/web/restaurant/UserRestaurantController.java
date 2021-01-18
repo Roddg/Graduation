@@ -26,12 +26,12 @@ public class UserRestaurantController {
     @GetMapping
     public List<RestaurantTo> getAll() {
         log.info("get all");
-        return restaurantService.getAllByDishesDate(LocalDate.now());
+        return restaurantService.getAllWithRatingByDate(LocalDate.now());
     }
 
     @GetMapping("/by")
     public List<RestaurantTo> getByDate(@RequestParam LocalDate date) {
         log.info("get by date {}", date);
-        return restaurantService.getAllByDishesDate(date);
+        return restaurantService.getAllWithRatingByDate(date);
     }
 }

@@ -19,16 +19,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
-import static ru.javaops.graduation.model.Vote.VOTE_DEADLINE;
-import static ru.javaops.graduation.util.RepositoryUtil.findById;
 import static ru.javaops.graduation.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 @RequiredArgsConstructor
 public class VoteService {
     protected final Logger log = LoggerFactory.getLogger(getClass());
+
+    public static final LocalTime VOTE_DEADLINE = LocalTime.of(11, 0);
 
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;

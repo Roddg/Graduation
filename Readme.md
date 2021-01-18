@@ -57,7 +57,6 @@ Curl commands were tested using Git Bash
 |-------------|------|-------------------------------------------------------|
 | Get all restaurants    | GET | `curl -s 'http://localhost:8080/graduation/restaurants' --user admin@gmail.com:admin`  |
 | Get restaurants by date    | GET | `curl -s 'http://localhost:8080/graduation/restaurants/by?date=2020-12-10' --user admin@gmail.com:admin`  |
-| Vote for restaurant    | POST | `curl -s -X POST 'http://localhost:8080/graduation/votes?restaurantId=100002' --user user@yandex.ru:password`  |
 | Get restaurant with id    | GET | `curl -s 'http://localhost:8080/graduation/admin/restaurants/100002' --user admin@gmail.com:admin`  |
 | Create restaurant    | POST | `curl -s -X POST -d '{"name":"New","enabled":true,"registered":"2020-12-26T17:28:39.214+00:00"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/ --user admin@gmail.com:admin`  |
 | Update restaurant    | PUT | `curl -s -X PUT -d '{"id":100002,"name":"UpdatedName","enabled":true,"registered":"2020-12-26T17:30:01.415+00:00"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100002 --user admin@gmail.com:admin`  |
@@ -84,3 +83,4 @@ Curl commands were tested using Git Bash
 | Get user votes    | GET | `curl -s  'http://localhost:8080/graduation/admin/users/100000/votes/' --user admin@gmail.com:admin`  |
 | Get user's vote today    | GET | `curl -s  'http://localhost:8080/graduation/admin/users/100001/votes/today' --user admin@gmail.com:admin`  |
 | Get users vote by date    | GET | `curl -s  'http://localhost:8080/graduation/admin/users/100001/votes/by?date=2020-12-11' --user admin@gmail.com:admin`  |
+| Vote for restaurant    | POST | `curl -s -X POST 'http://localhost:8080/graduation/votes?restaurantId=100002' --user user@yandex.ru:password`  |

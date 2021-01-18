@@ -9,7 +9,6 @@ import org.hibernate.annotations.OnDelete;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import static javax.persistence.FetchType.LAZY;
 import static org.hibernate.annotations.OnDeleteAction.CASCADE;
@@ -20,7 +19,6 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 @Setter
 @NoArgsConstructor
 public class Vote extends AbstractBaseEntity {
-    public static final LocalTime VOTE_DEADLINE = LocalTime.of(11, 0);
 
     @Column(name = "date", nullable = false)
     @NotNull

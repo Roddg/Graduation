@@ -45,7 +45,7 @@ public class RestaurantService {
      */
     @Cacheable("restaurantTos")
     @Transactional
-    public List<RestaurantTo> getAllByDishesDate(LocalDate date) {
+    public List<RestaurantTo> getAllWithRatingByDate(LocalDate date) {
         return restaurantRepository.getAllByDate(date);
     }
 
